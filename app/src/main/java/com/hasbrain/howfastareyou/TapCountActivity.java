@@ -17,6 +17,8 @@ import butterknife.OnClick;
 public class TapCountActivity extends AppCompatActivity {
 
     public static final int TIME_COUNT = 10000; //10s
+  public final static String EXTRA_DD = "" ;
+    public static final String EXTRA_PP = "" ;
     @Bind(R.id.bt_tap)
     Button btTap;
     @Bind(R.id.bt_start)
@@ -25,6 +27,8 @@ public class TapCountActivity extends AppCompatActivity {
     Chronometer tvTime;
 
     private long startTime;
+    int x, s;
+    private long btnTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +40,27 @@ public class TapCountActivity extends AppCompatActivity {
             public void onChronometerTick(Chronometer chronometer) {
                 if (SystemClock.elapsedRealtime() - startTime >= TIME_COUNT) {
                     pauseTapping();
+
+                    btnTime = btTap.getDrawingTime();
+
+                   // new Date().toString())
+                    android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+                    android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    TapCountResultFragment f1 = new TapCountResultFragment();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(EXTRA_DD, s);
+                    bundle.putLong(EXTRA_PP,btnTime);
+                    f1.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.fragment_container, f1);
+                    fragmentTransaction.commit();
                 }
             }
         });
+
+
+
+
     }
 
     @Override
@@ -59,10 +81,16 @@ public class TapCountActivity extends AppCompatActivity {
     @OnClick(R.id.bt_start)
     public void onStartBtnClicked(View v) {
         startTapping();
+
+
+
+
+//create an arraylist and add data through there.
     }
 
     @OnClick(R.id.bt_tap)
     public void onTapBtnClicked(View v) {
+
     }
 
     private void startTapping() {
@@ -71,6 +99,10 @@ public class TapCountActivity extends AppCompatActivity {
         tvTime.start();
         btTap.setEnabled(true);
         btStart.setEnabled(false);
+       x = x++;
+        x=s;
+
+
     }
 
     private void pauseTapping() {
@@ -78,5 +110,6 @@ public class TapCountActivity extends AppCompatActivity {
         tvTime.stop();
         btTap.setEnabled(false);
         btStart.setEnabled(true);
+
     }
 }
