@@ -11,14 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Arrays;
+
 /**
  * Created by Jupiter (vu.cao.duy@gmail.com) on 10/14/15.
  */
 public class TapCountResultFragment extends Fragment {
     int s;
-    long btnTime;
-    Data[] data;
+    long[] longArray;
+    Data[] Mdata;
+  //ArrayList<Long> mylist = new ArrayList<>();
+
     private static final String TAG = "MyApp";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -32,15 +37,15 @@ public class TapCountResultFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
        s = bundle.getInt(TapCountActivity.EXTRA_DD);
-       btnTime = bundle.getLong(TapCountActivity.EXTRA_PP);
-
+     //  btnTime = bundle.getLong(TapCountActivity.EXTRA_PP);
+      longArray = bundle.getLongArray("time");
 
         RecyclerView rvContacts = (RecyclerView) v.findViewById(R.id.view);
 
         // Initialize contacts
 
         // Create adapter passing in the sample user data
-       HighScoreAdapter adapter = new HighScoreAdapter(getActivity(), data);
+       HighScoreAdapter adapter = new HighScoreAdapter(getActivity(), Mdata);
         // Attach the adapter to the recyclerview to populate items
         rvContacts.setAdapter(adapter);
 
@@ -52,12 +57,13 @@ public class TapCountResultFragment extends Fragment {
 
 
     public class HighScoreAdapter extends RecyclerView.Adapter<HighScoreAdapter.ViewHolder> {
-        private Data[] mData;
-        private Context mContext;
+            Data data1  = new Data(s, longArray); //tried setting value to data / initialiizinghere
+        // i dont know how to use data1 because Data[] and Data is different
 
+        private Context mContext;
         public HighScoreAdapter(FragmentActivity activity, Data[] data) {
            activity= (FragmentActivity) mContext;
-            data =mData;
+            data = Mdata;
 
         }
 
@@ -85,7 +91,7 @@ public class TapCountResultFragment extends Fragment {
 
         // Pass in the newRedditPost     array into the constructor
         public HighScoreAdapter(Context context, Data[] data) {
-            mData = data;
+            Mdata= data;
             mContext = context;
         }
 
@@ -98,19 +104,19 @@ public class TapCountResultFragment extends Fragment {
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
 
-            Data data = mData[position];
+            Data data = Mdata[position];
 
             // Set item views based on your views and data model
             TextView textView = holder.btnclick;
             textView.setText(s);
             TextView textView1 = holder.time;
-            textView1.setText((int) btnTime);
+            textView1.setText(Arrays.toString(longArray));
 
         }
 
         @Override
         public int getItemCount() {
-            return mData.length;
+            return Mdata.length;
         }
 
 

@@ -9,18 +9,18 @@ public class Data {
 
  //   private int buttondata;
 
-    private int mbuttonClick;
+    private long[] mbuttonClick;
 
-  public Data(long time,int buttonClick){
+  public Data(long time, long[] buttonClick){
       mtime = time;
       mbuttonClick=buttonClick;
   }
 
-    public int getMbuttonClick() {
+    public long[] getMbuttonClick() {
         return mbuttonClick;
     }
 
-    public void setMbuttonClick(int mbuttonClick) {
+    public void setMbuttonClick(long[] mbuttonClick) {
         this.mbuttonClick = mbuttonClick;
     }
 

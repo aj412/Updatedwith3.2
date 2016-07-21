@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 
+import java.util.Date;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -40,15 +42,19 @@ public class TapCountActivity extends AppCompatActivity {
             public void onChronometerTick(Chronometer chronometer) {
                 if (SystemClock.elapsedRealtime() - startTime >= TIME_COUNT) {
                     pauseTapping();
+                  // btnTime =  Calendar.get(Calendar.HOUR_OF_DAY);
+                    Date f = new Date();
+                    btnTime =  f.getTime();
+                   // btnTime = btTap.getDrawingTime();
+                   long[] mylist = new long[]{btnTime};
+                    //this adds an element to the list.
 
-                    btnTime = btTap.getDrawingTime();
-
-                   // new Date().toString())
                     android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
                     android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     TapCountResultFragment f1 = new TapCountResultFragment();
 
                     Bundle bundle = new Bundle();
+                    bundle.putLongArray("time", mylist);
                     bundle.putInt(EXTRA_DD, s);
                     bundle.putLong(EXTRA_PP,btnTime);
                     f1.setArguments(bundle);
