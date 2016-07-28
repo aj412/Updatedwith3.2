@@ -11,15 +11,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Jupiter (vu.cao.duy@gmail.com) on 10/14/15.
  */
 public class TapCountResultFragment extends Fragment {
     int s;
-    long[] longArray;
-    Data[] Mdata;
+
+
+  // long[] timeArray;
+    List<Long> timeArray = new ArrayList<>();
+    List<Integer> buttonclickArray = new ArrayList<>();
+    //Data[] Mdata;
   //ArrayList<Long> mylist = new ArrayList<>();
 
     private static final String TAG = "MyApp";
@@ -27,7 +32,8 @@ public class TapCountResultFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_layout, container, false);
+     View rootview = inflater.inflate(R.layout.fragment_layout, container, false);
+        return rootview;
 
 
 }
@@ -37,15 +43,18 @@ public class TapCountResultFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
        s = bundle.getInt(TapCountActivity.EXTRA_DD);
-     //  btnTime = bundle.getLong(TapCountActivity.EXTRA_PP);
-      longArray = bundle.getLongArray("time");
+        buttonclickArray.add(s);
+        long[] array = bundle.getLongArray("time");
+        for(int i=0; i<array.length;i++) {
+            timeArray.add(array[i]); //values inserted in arraylist
+        }
+
 
         RecyclerView rvContacts = (RecyclerView) v.findViewById(R.id.view);
 
-        // Initialize contacts
 
         // Create adapter passing in the sample user data
-       HighScoreAdapter adapter = new HighScoreAdapter(getActivity(), Mdata);
+       HighScoreAdapter adapter = new HighScoreAdapter(getActivity(),timeArray);
         // Attach the adapter to the recyclerview to populate items
         rvContacts.setAdapter(adapter);
 
@@ -57,13 +66,19 @@ public class TapCountResultFragment extends Fragment {
 
 
     public class HighScoreAdapter extends RecyclerView.Adapter<HighScoreAdapter.ViewHolder> {
-            Data data1  = new Data(s, longArray); //tried setting value to data / initialiizinghere
-        // i dont know how to use data1 because Data[] and Data is different
-
+        private ArrayList<Long> time1;
         private Context mContext;
-        public HighScoreAdapter(FragmentActivity activity, Data[] data) {
-           activity= (FragmentActivity) mContext;
-            data = Mdata;
+
+
+        private Context getContext() {
+            return mContext;
+        }
+
+
+        public HighScoreAdapter(FragmentActivity activity, List<Long> data) {
+            activity = (FragmentActivity) mContext;
+            data = time1;
+
 
         }
 
@@ -82,41 +97,38 @@ public class TapCountResultFragment extends Fragment {
 
             public ViewHolder(View itemView) {
                 super(itemView);
-                btnclick= (TextView) itemView.findViewById(R.id.tv);
+           //     btnclick= (TextView) itemView.findViewById(R.id.tv);
                 time = (TextView) itemView.findViewById(R.id.tvTime);
 
             }
         }
 
 
-        // Pass in the newRedditPost     array into the constructor
-        public HighScoreAdapter(Context context, Data[] data) {
-            Mdata= data;
-            mContext = context;
-        }
 
-        private Context getContext() {
-            return mContext;
-        }
 
 
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
 
-            Data data = Mdata[position];
+
+
+            //Long data = timeArray.get(position);
 
             // Set item views based on your views and data model
-            TextView textView = holder.btnclick;
-            textView.setText(s);
-            TextView textView1 = holder.time;
-            textView1.setText(Arrays.toString(longArray));
+        //    TextView textView = holder.btnclick;
+//            textView.setText(s);
 
+            TextView textView1 = holder.time;
+            textView1.setText("" + timeArray.get(position)); //set array data here
+
+            //You need a fucking data class to display the recyclerview
+            //Reason being, data can be captured but u need the data class to be filled and populate with values for display
         }
 
         @Override
         public int getItemCount() {
-            return Mdata.length;
+            return timeArray.size();
         }
 
 

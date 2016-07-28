@@ -5,22 +5,25 @@ package com.hasbrain.howfastareyou;
  */
 public class Data {
 
+    private int mbuttonClick;
     private long mtime;
 
- //   private int buttondata;
-
-    private long[] mbuttonClick;
-
-  public Data(long time, long[] buttonClick){
+  public Data(long time, int buttonClick){
       mtime = time;
       mbuttonClick=buttonClick;
   }
 
-    public long[] getMbuttonClick() {
+    public Data(int s, long longArray) {
+        mbuttonClick =s;
+        mtime = longArray;
+
+    }
+
+    public int getMbuttonClick() {
         return mbuttonClick;
     }
 
-    public void setMbuttonClick(long[] mbuttonClick) {
+    public void setMbuttonClick(int mbuttonClick) {
         this.mbuttonClick = mbuttonClick;
     }
 

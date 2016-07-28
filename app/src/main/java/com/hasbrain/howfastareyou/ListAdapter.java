@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 /**
  * Created by ajatc on 15/7/2016.
@@ -25,7 +24,7 @@ String message;
         }
 
        // Data data = getItem(position);
-        TextView title = (TextView) convertView.findViewById(R.id.tv);
+    //    TextView title = (TextView) convertView.findViewById(R.id.tv);
      //String var =
         //title.setText();
        // message = getIntent().getExtras().getString(TestActivity.EXTRA_DD);
