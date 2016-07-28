@@ -120,7 +120,7 @@ public class TapCountResultFragment extends Fragment {
 //            textView.setText(s);
 
             TextView textView1 = holder.time;
-            textView1.setText("" + timeArray.get(position)); //set array data here
+            textView1.setText("" + String.valueOf(timeArray.get(position))); //set array data here
 
             //You need a fucking data class to display the recyclerview
             //Reason being, data can be captured but u need the data class to be filled and populate with values for display
