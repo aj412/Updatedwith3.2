@@ -54,7 +54,7 @@ public class TapCountResultFragment extends Fragment {
 
 
         // Create adapter passing in the sample user data
-       HighScoreAdapter adapter = new HighScoreAdapter(getActivity(),timeArray);
+       HighScoreAdapter adapter = new HighScoreAdapter(getActivity(),timeArray, buttonclickArray);
         // Attach the adapter to the recyclerview to populate items
         rvContacts.setAdapter(adapter);
 
@@ -75,7 +75,7 @@ public class TapCountResultFragment extends Fragment {
         }
 
 
-        public HighScoreAdapter(FragmentActivity activity, List<Long> data) {
+        public HighScoreAdapter(FragmentActivity activity, List<Long> data, List<Integer> buttonclickArray) {
             activity = (FragmentActivity) mContext;
             data = time1;
 
@@ -97,7 +97,7 @@ public class TapCountResultFragment extends Fragment {
 
             public ViewHolder(View itemView) {
                 super(itemView);
-           //     btnclick= (TextView) itemView.findViewById(R.id.tv);
+               btnclick= (TextView) itemView.findViewById(R.id.tv);
                 time = (TextView) itemView.findViewById(R.id.tvTime);
 
             }
@@ -116,8 +116,8 @@ public class TapCountResultFragment extends Fragment {
             //Long data = timeArray.get(position);
 
             // Set item views based on your views and data model
-        //    TextView textView = holder.btnclick;
-//            textView.setText(s);
+            TextView textView = holder.btnclick;
+            textView.setText(String.valueOf(s));
 
             TextView textView1 = holder.time;
             textView1.setText("" + String.valueOf(timeArray.get(position))); //set array data here

@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.TextView;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -37,9 +38,10 @@ public class TapCountActivity extends AppCompatActivity {
     Chronometer tvTime;
 
     private long startTime;
-    int x, s;
-    private long btnTime;
+    int clickcount=0;
 
+    private long btnTime;
+private TextView btnclick;
    List<Long> timeArray = new ArrayList<>();
     private GoogleApiClient client;
 
@@ -48,12 +50,15 @@ public class TapCountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_count);
         ButterKnife.bind(this);
+
+       // String.valueOf(s)
         tvTime.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
                 if (SystemClock.elapsedRealtime() - startTime >= TIME_COUNT) {
                     pauseTapping();
                     timeArray.add(System.currentTimeMillis()); //step1
+//                   btnclick.setText( String.valueOf(clickcount));
                     long[] array = new long[timeArray.size()];
                     for(int i=0;i<timeArray.size();i++){
                         array[i] = timeArray.get(i);
@@ -66,13 +71,22 @@ public class TapCountActivity extends AppCompatActivity {
                     Bundle bundle = new Bundle();
 
                     bundle.putLongArray("time",array ); //step 2
-                    bundle.putInt(EXTRA_DD, s);
+                    bundle.putInt(EXTRA_DD, clickcount);
                     f1.setArguments(bundle);
                     fragmentTransaction.replace(R.id.fragment_container, f1);
                     fragmentTransaction.commit();
                 }
             }
         });
+       btTap.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                clickcount=clickcount+1;
+
+            }
+        });
+
 
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
@@ -111,8 +125,7 @@ public class TapCountActivity extends AppCompatActivity {
         tvTime.start();
         btTap.setEnabled(true);
         btStart.setEnabled(false);
-        x = x++;
-        x = s;
+
 
 
     }
@@ -123,11 +136,13 @@ public class TapCountActivity extends AppCompatActivity {
         btTap.setEnabled(false);
         btStart.setEnabled(true);
 
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        clickcount = 0;
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
