@@ -19,10 +19,10 @@ import java.util.List;
  */
 public class TapCountResultFragment extends Fragment {
     int s;
-
+Context context;
 
   // long[] timeArray;
-    List<Long> timeArray = new ArrayList<>();
+    List<String> timeArray = new ArrayList<>();
     List<Integer> buttonclickArray = new ArrayList<>();
     //Data[] Mdata;
   //ArrayList<Long> mylist = new ArrayList<>();
@@ -39,15 +39,30 @@ public class TapCountResultFragment extends Fragment {
 }
 
     @Override
+    public void onSaveInstanceState(Bundle bundle) {
+        super.onSaveInstanceState(bundle);
+        bundle.putIntegerArrayList("integer", (ArrayList<Integer>) buttonclickArray);
+        bundle.putStringArrayList("teem", (ArrayList<String>) timeArray);
+
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            //Restore the fragment's state
+            timeArray = (List<String>) savedInstanceState.getStringArrayList("teem");
+            buttonclickArray = (List<Integer>) savedInstanceState.getIntegerArrayList(("integerx"));
+    }
+    }
+    @Override
     public void onViewCreated(final View v, Bundle savedInstanceState) {
 
         Bundle bundle = this.getArguments();
        s = bundle.getInt(TapCountActivity.EXTRA_DD);
         buttonclickArray.add(s);
-        long[] array = bundle.getLongArray("time");
-        for(int i=0; i<array.length;i++) {
-            timeArray.add(array[i]); //values inserted in arraylist
-        }
+        timeArray = bundle.getStringArrayList("time");
+        setRetainInstance(true);
 
 
         RecyclerView rvContacts = (RecyclerView) v.findViewById(R.id.view);
@@ -59,14 +74,14 @@ public class TapCountResultFragment extends Fragment {
         rvContacts.setAdapter(adapter);
 
         // Set layout manager to position the items
-        rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvContacts.setLayoutManager(new LinearLayoutManager(( getContext())));
         // That's all!
     }
 
 
 
     public class HighScoreAdapter extends RecyclerView.Adapter<HighScoreAdapter.ViewHolder> {
-        private ArrayList<Long> time1;
+        private ArrayList<String> time1;
         private Context mContext;
 
 
@@ -75,7 +90,7 @@ public class TapCountResultFragment extends Fragment {
         }
 
 
-        public HighScoreAdapter(FragmentActivity activity, List<Long> data, List<Integer> buttonclickArray) {
+        public HighScoreAdapter(FragmentActivity activity, List<String> data, List<Integer> buttonclickArray) {
             activity = (FragmentActivity) mContext;
             data = time1;
 

@@ -1,9 +1,11 @@
 package com.hasbrain.howfastareyou;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -12,13 +14,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.TextView;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -26,6 +29,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class TapCountActivity extends AppCompatActivity {
+private Context context;
 
     public static final int TIME_COUNT = 10000; //10s
     public final static String EXTRA_DD = "";
@@ -36,33 +40,31 @@ public class TapCountActivity extends AppCompatActivity {
     Button btStart;
     @Bind(R.id.tv_time)
     Chronometer tvTime;
-
+Fragment mContent;
     private long startTime;
     int clickcount=0;
-
-    private long btnTime;
-private TextView btnclick;
-   List<Long> timeArray = new ArrayList<>();
+String s;
+   List<String> timeArray = new ArrayList<>();
     private GoogleApiClient client;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_count);
         ButterKnife.bind(this);
-
+        if (savedInstanceState != null) {
+            //Restore the fragment's instance
+          mContent = getSupportFragmentManager().getFragment(savedInstanceState, "mContent");
+        }
        // String.valueOf(s)
         tvTime.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
                 if (SystemClock.elapsedRealtime() - startTime >= TIME_COUNT) {
                     pauseTapping();
-                    timeArray.add(System.currentTimeMillis()); //step1
+                     //step1
 //                   btnclick.setText( String.valueOf(clickcount));
-                    long[] array = new long[timeArray.size()];
-                    for(int i=0;i<timeArray.size();i++){
-                        array[i] = timeArray.get(i);
-                    }
+
+
 
                     FragmentManager fragmentManager = getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -70,7 +72,7 @@ private TextView btnclick;
 
                     Bundle bundle = new Bundle();
 
-                    bundle.putLongArray("time",array ); //step 2
+                    bundle.putStringArrayList("time", (ArrayList<String>) timeArray); //step 2
                     bundle.putInt(EXTRA_DD, clickcount);
                     f1.setArguments(bundle);
                     fragmentTransaction.replace(R.id.fragment_container, f1);
@@ -89,6 +91,14 @@ private TextView btnclick;
 
 
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //Save the fragment's instance
+        getSupportFragmentManager().putFragment(outState, "mContent", mContent);
     }
 
     @Override
@@ -135,7 +145,18 @@ private TextView btnclick;
         tvTime.stop();
         btTap.setEnabled(false);
         btStart.setEnabled(true);
+        long yourmilliseconds = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date resultdate = new Date(yourmilliseconds);
 
+        s = String.valueOf(sdf.format(resultdate));
+       //  s =  String.valueOf(System.currentTimeMillis());
+         timeArray.add(s);
+        //Convert long Value to String here
+        //Find a way to insert this string value inside arraylist
+
+
+        //either that or convert arraylist long to String in the other class
 
     }
 
